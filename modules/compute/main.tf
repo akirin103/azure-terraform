@@ -1,10 +1,10 @@
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                  = var.virtual_machine_name
-  resource_group_name   = azurerm_resource_group.myterraformgroup.name
+  resource_group_name   = var.resource_group_name
   location              = var.location
   size                  = "Standard_ds1_v2"
   admin_username        = "adminuser"
-  network_interface_ids = [azurerm_network_interface.mynetworkinterface.id]
+  network_interface_ids = [var.network_interface]
 
   admin_ssh_key {
     username   = "adminuser"
