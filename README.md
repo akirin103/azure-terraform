@@ -25,13 +25,7 @@ $ terraform destroy --auto-approve
 
 <br />
 
-### test
-```bash
-# Get vm's public ip
-# Please change resource group(test-rg)　and vm name(test-vm) as appropriate
-$ az vm list-ip-addresses -g test-rg -n test-vm \
-| jq '.[0] | .virtualMachine | .network | .publicIpAddresses | .[0] | .ipAddress'
+## links
 
-# Please change <IP Address> To the public ip before you get
-$ ssh adminuser@<IP Address>
-```
+[Terraform registry Microsoft Azure](https://registry.terraform.io/namespaces/Azure)
+
