@@ -12,3 +12,12 @@ variable "azurerm_app_service_name" {
   type        = string
   description = "The name of appservice."
 }
+
+variable "tags" {
+  description = "The tags to associate with your appservice and appservice plan."
+  type        = map(string)
+
+  default = {
+    environment = "dev"
+  }
+}

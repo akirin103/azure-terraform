@@ -2,13 +2,8 @@ data "azurerm_resource_group" "this" {
   name = var.resource_group_name
 }
 
-resource "random_integer" "sample" {
-  min = 1
-  max = 99999
-}
-
 resource "azurerm_app_service_plan" "this" {
-  name                = "${var.azurerm_app_service_plan_name}-${random_integer.sample.result}"
+  name                = var.azurerm_app_service_plan_name
   location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
 
@@ -16,20 +11,22 @@ resource "azurerm_app_service_plan" "this" {
   reserved = true # `reserved` has to be set to true when kind is set to `Linux`
 
   sku {
-    tier = "Free"
-    size = "F1"
+    tier = "Standard"
+    size = "S1"
   }
+
+  tags = var.tags
 }
 
 resource "azurerm_app_service" "this" {
-  name                = "${var.azurerm_app_service_name}-${random_integer.sample.result}"
+  name                = var.azurerm_app_service_name
   location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
   app_service_plan_id = azurerm_app_service_plan.this.id
   site_config {
-    use_32_bit_worker_process = true # https://github.com/hashicorp/terraform-provider-azurerm/issues/1560
-    dotnet_framework_version  = "v4.0"
-    scm_type                  = "LocalGit"
+    # when using an App Service Plan in the Free or Shared Tiers use_32_bit_worker_process must be set to true
+    use_32_bit_worker_process = true
+    linux_fx_version          = "dotnetcore|5.0"
   }
 
   # app_settings = {
@@ -42,5 +39,6 @@ resource "azurerm_app_service" "this" {
   #   value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
   # }
 
+  tags       = var.tags
   depends_on = [azurerm_app_service_plan.this]
 }
