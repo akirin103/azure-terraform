@@ -7,7 +7,7 @@ Authentication information is assumed to use "az login" of "azure cli"
 
 <br />
 
-### terraform commands
+## terraform commands
 
 ```bash
 # format
@@ -27,5 +27,14 @@ $ terraform destroy --auto-approve
 
 ## links
 
-[Terraform registry Microsoft Azure](https://registry.terraform.io/namespaces/Azure)
+[Terraform registry Microsoft Azure](https://registry.terraform.io/namespaces/Azure)  
+[Create two web apps connected securely with Private Endpoint and VNet integration](https://docs.microsoft.com/ja-jp/azure/app-service/scripts/terraform-secure-backend-frontend)
 
+<br />
+
+## about modules
+
+- network
+[Terraform registry Microsoft Azure Network](https://registry.terraform.io/modules/Azure/network/azurerm/latest)
+
+    added only subnet's delegation settings to use appservice vnet integration feature.

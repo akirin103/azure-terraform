@@ -16,8 +16,19 @@ resource "azurerm_resource_group" "this" {
   location = var.location
 }
 
+module "appservice" {
+  source                        = "./modules/appservice"
+  resource_group_name           = azurerm_resource_group.this.name
+  azurerm_app_service_plan_name = "testappplan-abc12345"
+  azurerm_app_service_name      = "testapp-abc12345"
+  tags = {
+    environment = var.stage
+  }
+  depends_on = [azurerm_resource_group.this]
+}
+
 module "network" {
-  source              = "Azure/network/azurerm"
+  source              = "./modules/network"
   resource_group_name = azurerm_resource_group.this.name
   vnet_name           = var.vnet_name
   address_spaces      = ["10.0.0.0/16"]
@@ -34,12 +45,44 @@ module "network" {
     # "subnet3" : ["Microsoft.Sql"]
   }
 
+  subnet_delegations = {
+    "subnet3" : {
+      service_delegation_name = "Microsoft.Web/serverFarms"
+    }
+  }
+
   tags = {
     environment = var.stage
   }
 
   depends_on = [azurerm_resource_group.this]
 }
+
+# Official Network Modules
+# module "network" {
+#   source              = "Azure/network/azurerm"
+#   resource_group_name = azurerm_resource_group.this.name
+#   vnet_name           = var.vnet_name
+#   address_spaces      = ["10.0.0.0/16"]
+#   subnet_names        = ["subnet1", "subnet2", "subnet3"]
+#   subnet_prefixes     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+
+#   subnet_enforce_private_link_endpoint_network_policies = {
+#     # "subnet1" : true
+#   }
+
+#   subnet_service_endpoints = {
+#     # "subnet1" : ["Microsoft.Sql"],
+#     # "subnet2" : ["Microsoft.Sql"],
+#     # "subnet3" : ["Microsoft.Sql"]
+#   }
+
+#   tags = {
+#     environment = var.stage
+#   }
+
+#   depends_on = [azurerm_resource_group.this]
+# }
 
 module "linuxserver" {
   source              = "Azure/compute/azurerm"
