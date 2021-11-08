@@ -21,3 +21,19 @@ variable "tags" {
     environment = "dev"
   }
 }
+
+variable "virtual_network_id" {
+  description = "The id of Virtual Network."
+  type        = string
+}
+
+variable "private_endpoint_subnet_id" {
+  description = "The id of Subnet for private endpoint."
+  type        = string
+}
+
+variable "vnet_swift_connection" {
+  description = "The ids of subnet for vnet integration."
+  type        = string
+  default     = ""
+}

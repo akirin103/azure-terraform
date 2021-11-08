@@ -72,7 +72,3 @@ variable "subnet_delegations" {
   #   }
   # }
 }
-
-# variable "subnet_service_delegation" {
-#   default     = map(list(string))
-# }
